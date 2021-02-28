@@ -1,0 +1,31 @@
+.convue-main {
+    font-family: sans-serif;
+    border: 1px solid #eee;
+    border-radius: 2px;
+    padding: 20px 30px;
+    margin-top: 1em;
+    margin-bottom: 40px;
+    user-select: none;
+    overflow-x: auto;
+}
+
+#matrix {
+    background-color: bisque;
+    width: 80vmin;
+    height: 80vmin;
+    display: grid;
+    --row-count: 11;
+    --column-count: 11;
+    grid-template-rows: repeat(var(--row-count), 1fr);
+    grid-template-columns: repeat(var(--column-count), 1fr);
+}
+
+.dead-cell {
+    background-color: seashell;
+    border: 0.1vmin solid silver;
+}
+
+.living-cell {
+background-color: powderblue;
+border: 0.1vmin solid silver;
+}
