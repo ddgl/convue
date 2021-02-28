@@ -34,16 +34,28 @@ const ConvueApp = {
             }
             console.log(matrix.children)
         },
-        toggleCell(event) {
-            console.log(event)
-            var cell = event.target
-            console.log(cell)
+        invertCell(cell) {
             if(cell.classList.contains('dead-cell')) {
                 cell.classList.remove('dead-cell');
                 cell.classList.add('living-cell');
             } else if (cell.classList.contains('living-cell')){
                 cell.classList.remove('living-cell');
                 cell.classList.add('dead-cell');
+            }
+        },
+        toggleCell(event) {
+            console.log(event)
+            var cell = event.target
+            console.log(cell)
+            this.invertCell(cell)
+        },
+        invertCells() {
+            const matrix = document.getElementById('matrix')
+            const cells = matrix.children
+            console.log(cells)
+            for(let cell of cells) {
+                console.log(cell)
+                this.invertCell(cell)
             }
         }
     },
