@@ -28,8 +28,8 @@ const ConvueApp = {
                 columnIndex = i%this.columnCount
                 console.log("row: " + rowIndex)
                 console.log("column: " + columnIndex)
-                cellElement.classList.add("rowIndex-" + rowIndex)
-                cellElement.classList.add("columnIndex-" + columnIndex)
+                cellElement.setAttribute("data-rowindex", rowIndex)
+                cellElement.setAttribute("data-columnindex", columnIndex)
                 matrix.appendChild(cellElement);
             }
             console.log(matrix.children)
@@ -57,6 +57,92 @@ const ConvueApp = {
                 console.log(cell)
                 this.invertCell(cell)
             }
+        },
+        getNeighbours(event) {
+            const cell = event.target
+            const rowIndex = parseInt(cell.getAttribute("data-rowindex"))
+            const columnIndex = parseInt(cell.getAttribute("data-columnindex"))
+            console.log(typeof(rowIndex))
+            console.log(typeof(columnIndex))
+            console.log(rowIndex + ", " + columnIndex)
+            let neighboursAliveCount = 0;
+
+            const matrix = document.getElementById('matrix')
+
+            //n1
+            const n1 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+            console.log(n1)
+            if(n1.classList.contains('living-cell')) {
+                ++neighboursAliveCount
+            }
+
+            //n2
+            const n2 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex) + "']")
+            console.log(n2)
+            if(n2.classList.contains('living-cell')) {
+                ++neighboursAliveCount
+            }
+
+            //n3
+            const n3 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
+            console.log(n3)
+            if(n3.classList.contains('living-cell')) {
+                ++neighboursAliveCount
+            }
+
+            //n4
+            const n4 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+            console.log(n4)
+            if(n4.classList.contains('living-cell')) {
+                ++neighboursAliveCount
+            }
+
+            //n5
+            const n5 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex + 1) + "']")
+            console.log(n5)
+            if(n5.classList.contains('living-cell')) {
+                ++neighboursAliveCount
+            }
+
+            //n6
+            const n6 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+            console.log(n6)
+            if(n6.classList.contains('living-cell')) {
+                ++neighboursAliveCount
+            }
+
+            //n7
+            const n7 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex) + "']")
+            console.log(n7)
+            if(n7.classList.contains('living-cell')) {
+                ++neighboursAliveCount
+            }
+
+            //n8
+            const n8 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
+            console.log(n8)
+            if(n8.classList.contains('living-cell')) {
+                ++neighboursAliveCount
+            }
+
+
+            if(cell.classList.contains('dead-cell')) {
+                if(neighboursAliveCount == 3) {
+                    console.log("you will be resurrected, because you have exactly " + neighboursAliveCount + " neighbours")
+                } else {
+                    console.log("you stay dead, because you don't have exactly 3 neighbours, you have " + neighboursAliveCount + " neighbours")
+                }
+            } else if (cell.classList.contains('living-cell')) {
+                if(neighboursAliveCount < 2) {
+                    console.log("you will die, because you are lonely, because you only have " + neighboursAliveCount + " neighbours")
+                } else if(neighboursAliveCount > 3){
+                    console.log("you will die, because of overpopulation, because you have " + neighboursAliveCount + " neighbours")
+                } else {
+                    console.log("you stay alive, because the population has a reasonable size, bacause you have " + neighboursAliveCount + " neighbours")
+                }
+            }
+
+
         }
     },
 
