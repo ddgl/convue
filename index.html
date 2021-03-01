@@ -15,6 +15,7 @@
     <div id="convue-app" class="convue-main">
         <h1>Hi at {{ app_title }}</h1>
         <p><button v-on:click="invertCells">Invert cells</button></p>
+        <p><button v-on:click="nextGeneration">Next generation</button></p>
         <div id="matrix" ref="matrix" v-on:click="toggleCell" v-on:mouseover="getNeighbours"></div>
     </div>
 

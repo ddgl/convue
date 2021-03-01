@@ -60,8 +60,10 @@ const ConvueApp = {
         },
         getNeighbours(event) {
             const cell = event.target
+            const isAlive = cell.classList.contains('living-cell')
             const rowIndex = parseInt(cell.getAttribute("data-rowindex"))
             const columnIndex = parseInt(cell.getAttribute("data-columnindex"))
+            console.log(isAlive)
             console.log(typeof(rowIndex))
             console.log(typeof(columnIndex))
             console.log(rowIndex + ", " + columnIndex)
@@ -159,6 +161,154 @@ const ConvueApp = {
             }
 
 
+            const status = {isAlive : isAlive, neighboursAliveCount : neighboursAliveCount}
+            console.log(status)
+            return status
+
+
+        },
+
+        getStatus(cell) {
+            const isAlive = cell.classList.contains('living-cell')
+            const rowIndex = parseInt(cell.getAttribute("data-rowindex"))
+            const columnIndex = parseInt(cell.getAttribute("data-columnindex"))
+            console.log(isAlive)
+            console.log(typeof(rowIndex))
+            console.log(typeof(columnIndex))
+            console.log(rowIndex + ", " + columnIndex)
+            let neighboursAliveCount = 0;
+
+            const matrix = document.getElementById('matrix')
+
+            //n1
+            if(!(columnIndex == 0 || rowIndex == 0)){
+                const n1 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+                console.log(n1)
+                if(n1.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }
+
+            //n2
+            if(!(rowIndex == 0)){
+                const n2 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex) + "']")
+                console.log(n2)
+                if(n2.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }
+
+            //n3
+            if(!(rowIndex == 0 || columnIndex == this.columnCount - 1)){
+                const n3 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
+                console.log(n3)
+                if(n3.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }
+
+            //n4
+            if(!(columnIndex == 0)){ //!(columnIndex == 0)
+                const n4 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+                console.log(n4)
+                if(n4.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }   
+
+            //n5
+            if(!(columnIndex == this.columnCount - 1)){ //!(columnIndex == this.columnCount - 1)
+                const n5 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex + 1) + "']")
+                console.log(n5)
+                if(n5.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }
+
+            //n6
+            if(!(rowIndex == this.rowCount - 1 || columnIndex == 0)){ //!(rowIndex == this.rowCount - 1 || columnIndex == 0)
+                const n6 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+                console.log(n6)
+                if(n6.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }
+
+            //n7
+            if(!(rowIndex == this.rowCount - 1)){ //!(rowIndex == this.rowCount - 1)
+                const n7 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex) + "']")
+                console.log(n7)
+                if(n7.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }
+
+            //n8
+            if(!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)){ //!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)
+                const n8 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
+                console.log(n8)
+                if(n8.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }
+
+
+            if(cell.classList.contains('dead-cell')) {
+                if(neighboursAliveCount == 3) {
+                    console.log("you will be resurrected, because you have exactly " + neighboursAliveCount + " neighbours")
+                } else {
+                    console.log("you stay dead, because you don't have exactly 3 neighbours, you have " + neighboursAliveCount + " neighbours")
+                }
+            } else if (cell.classList.contains('living-cell')) {
+                if(neighboursAliveCount < 2) {
+                    console.log("you will die, because you are lonely, because you only have " + neighboursAliveCount + " neighbours")
+                } else if(neighboursAliveCount > 3){
+                    console.log("you will die, because of overpopulation, because you have " + neighboursAliveCount + " neighbours")
+                } else {
+                    console.log("you stay alive, because the population has a reasonable size, bacause you have " + neighboursAliveCount + " neighbours")
+                }
+            }
+
+
+            const status = {isAlive : isAlive, neighboursAliveCount : neighboursAliveCount}
+            console.log(status)
+            return status
+
+
+        },
+
+        nextGeneration(){
+            const matrix = document.getElementById('matrix')
+            const cells = matrix.children
+            const tmp = [];
+
+            for (let cell of cells) {
+                tmp.push(this.getStatus(cell))
+            }
+
+            let i = 0;
+            for(let cell of cells) {
+
+                if(!tmp[i].isAlive) {
+                    if(tmp[i].neighboursAliveCount == 3) {
+                        cell.classList.remove('dead-cell');
+                        cell.classList.add('living-cell');
+                    } else {
+                        //stay dead
+                    }
+                } else if (tmp[i].isAlive) {
+                    if(tmp[i].neighboursAliveCount < 2) {
+                        cell.classList.remove('living-cell');
+                        cell.classList.add('dead-cell');
+                    } else if(tmp[i].neighboursAliveCount > 3){
+                        cell.classList.remove('living-cell');
+                        cell.classList.add('dead-cell');
+                    } else {
+                        //stay alive
+                    }
+                }
+                ++i
+            }
         }
     },
 
