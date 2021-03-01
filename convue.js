@@ -70,59 +70,75 @@ const ConvueApp = {
             const matrix = document.getElementById('matrix')
 
             //n1
-            const n1 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-            console.log(n1)
-            if(n1.classList.contains('living-cell')) {
-                ++neighboursAliveCount
+            if(!(columnIndex == 0 || rowIndex == 0)){
+                const n1 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+                console.log(n1)
+                if(n1.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
             }
 
             //n2
-            const n2 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex) + "']")
-            console.log(n2)
-            if(n2.classList.contains('living-cell')) {
-                ++neighboursAliveCount
+            if(!(rowIndex == 0)){
+                const n2 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex) + "']")
+                console.log(n2)
+                if(n2.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
             }
 
             //n3
-            const n3 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-            console.log(n3)
-            if(n3.classList.contains('living-cell')) {
-                ++neighboursAliveCount
+            if(!(rowIndex == 0 || columnIndex == this.columnCount - 1)){
+                const n3 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
+                console.log(n3)
+                if(n3.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
             }
 
             //n4
-            const n4 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-            console.log(n4)
-            if(n4.classList.contains('living-cell')) {
-                ++neighboursAliveCount
-            }
+            if(!(columnIndex == 0)){ //!(columnIndex == 0)
+                const n4 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+                console.log(n4)
+                if(n4.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }   
 
             //n5
-            const n5 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-            console.log(n5)
-            if(n5.classList.contains('living-cell')) {
-                ++neighboursAliveCount
+            if(!(columnIndex == this.columnCount - 1)){ //!(columnIndex == this.columnCount - 1)
+                const n5 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex + 1) + "']")
+                console.log(n5)
+                if(n5.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
             }
 
             //n6
-            const n6 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-            console.log(n6)
-            if(n6.classList.contains('living-cell')) {
-                ++neighboursAliveCount
+            if(!(rowIndex == this.rowCount - 1 || columnIndex == 0)){ //!(rowIndex == this.rowCount - 1 || columnIndex == 0)
+                const n6 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+                console.log(n6)
+                if(n6.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
             }
 
             //n7
-            const n7 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex) + "']")
-            console.log(n7)
-            if(n7.classList.contains('living-cell')) {
-                ++neighboursAliveCount
+            if(!(rowIndex == this.rowCount - 1)){ //!(rowIndex == this.rowCount - 1)
+                const n7 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex) + "']")
+                console.log(n7)
+                if(n7.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
             }
 
             //n8
-            const n8 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-            console.log(n8)
-            if(n8.classList.contains('living-cell')) {
-                ++neighboursAliveCount
+            if(!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)){ //!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)
+                const n8 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
+                console.log(n8)
+                if(n8.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
             }
 
 
