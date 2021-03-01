@@ -14,7 +14,7 @@
 <body>
     <div id="convue-app" class="convue-main">
         <h1>Hi at {{ app_title }}</h1>
-        <p><button v-on:click="shuffle">Shuffle</button></p>
+        <p><button v-on:click="shuffle">Shuffle cells</button></p>
         <p><button v-on:click="invertCells">Invert cells</button></p>
         <p><button v-on:click="nextGeneration" @keyup.enter="nextGeneration">Next generation</button></p>
         <div id="matrix" ref="matrix" v-on:click="toggleCell" v-on:mouseover="getStatusByHover"></div>

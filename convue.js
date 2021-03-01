@@ -65,95 +65,26 @@ const ConvueApp = {
         },
         getStatusByHover(event) {
             const cell = event.target
-            const isAlive = cell.classList.contains('living-cell')
-            const rowIndex = parseInt(cell.getAttribute("data-rowindex"))
-            const columnIndex = parseInt(cell.getAttribute("data-columnindex"))
-            let neighboursAliveCount = 0;
-            const matrix = document.getElementById('matrix')
+            const status = this.getStatus(cell)
 
-            //n1
-            if(!(columnIndex == 0 || rowIndex == 0)){
-                const n1 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                if(n1.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }
+            console.log("cell at (" + status.rowIndex + ", " + status.columnIndex + "): " + "isAlive - " + status.isAlive + ", " + "neighboursAliveCount - " + status.neighboursAliveCount)
 
-            //n2
-            if(!(rowIndex == 0)){
-                const n2 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex) + "']")
-                if(n2.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }
-
-            //n3
-            if(!(rowIndex == 0 || columnIndex == this.columnCount - 1)){
-                const n3 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-                if(n3.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }
-
-            //n4
-            if(!(columnIndex == 0)){ //!(columnIndex == 0)
-                const n4 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                if(n4.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }   
-
-            //n5
-            if(!(columnIndex == this.columnCount - 1)){ //!(columnIndex == this.columnCount - 1)
-                const n5 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-                if(n5.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }
-
-            //n6
-            if(!(rowIndex == this.rowCount - 1 || columnIndex == 0)){ //!(rowIndex == this.rowCount - 1 || columnIndex == 0)
-                const n6 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                if(n6.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }
-
-            //n7
-            if(!(rowIndex == this.rowCount - 1)){ //!(rowIndex == this.rowCount - 1)
-                const n7 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex) + "']")
-                if(n7.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }
-
-            //n8
-            if(!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)){ //!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)
-                const n8 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-                if(n8.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }
-
-            console.log("cell at (" + rowIndex + ", " + columnIndex + "): " + "isAlive - " + isAlive + ", " + "neighboursAliveCount - " + neighboursAliveCount)
-
-            if(cell.classList.contains('dead-cell')) {
-                if(neighboursAliveCount == 3) {
+            if(!status.isAlive) {
+                if(status.neighboursAliveCount == 3) {
                     console.log("You will be resurrected, because you have exactly 3 neighbours.")
                 } else {
                     console.log("You stay dead, because you don't have exactly 3 neighbours.")
                 }
-            } else if (cell.classList.contains('living-cell')) {
-                if(neighboursAliveCount < 2) {
+            } else if (status.isAlive) {
+                if(status.neighboursAliveCount < 2) {
                     console.log("You will die, because you are lonely.")
-                } else if(neighboursAliveCount > 3){
+                } else if(status.neighboursAliveCount > 3){
                     console.log("You will die, because of overpopulation.")
                 } else {
                     console.log("You stay alive, because the population has a reasonable size.")
                 }
             }
         },
-
         getStatus(cell) {
             const isAlive = cell.classList.contains('living-cell')
             const rowIndex = parseInt(cell.getAttribute("data-rowindex"))
@@ -163,8 +94,8 @@ const ConvueApp = {
 
             /*
             *n1 n2 n3
-            *n4    n5
-            *n6 n7 n8 
+            *n8    n4
+            *n7 n6 n5 
             */
 
             //n1
@@ -192,50 +123,49 @@ const ConvueApp = {
             }
 
             //n4
-            if(!(columnIndex == 0)){ //!(columnIndex == 0)
-                const n4 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                if(n4.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }   
-
-            //n5
-            if(!(columnIndex == this.columnCount - 1)){ //!(columnIndex == this.columnCount - 1)
+            if(!(columnIndex == this.columnCount - 1)){
                 const n5 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex + 1) + "']")
                 if(n5.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
             }
 
-            //n6
-            if(!(rowIndex == this.rowCount - 1 || columnIndex == 0)){ //!(rowIndex == this.rowCount - 1 || columnIndex == 0)
-                const n6 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                if(n6.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }
-
-            //n7
-            if(!(rowIndex == this.rowCount - 1)){ //!(rowIndex == this.rowCount - 1)
-                const n7 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex) + "']")
-                if(n7.classList.contains('living-cell')) {
-                    ++neighboursAliveCount
-                }
-            }
-
-            //n8
-            if(!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)){ //!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)
+            //n5
+            if(!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)){
                 const n8 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
                 if(n8.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
             }
 
-            const status = {isAlive : isAlive, neighboursAliveCount : neighboursAliveCount}
+            //n6
+            if(!(rowIndex == this.rowCount - 1)){
+                const n7 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex) + "']")
+                if(n7.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }
+
+            //n7
+            if(!(rowIndex == this.rowCount - 1 || columnIndex == 0)){
+                const n6 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+                if(n6.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }
+
+            //n8
+            if(!(columnIndex == 0)){
+                const n4 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex - 1) + "']")
+                if(n4.classList.contains('living-cell')) {
+                    ++neighboursAliveCount
+                }
+            }   
+
+            const status = {rowIndex:rowIndex, columnIndex:columnIndex, isAlive : isAlive, neighboursAliveCount : neighboursAliveCount}
             return status
 
         },
-
         nextGeneration(){
             const matrix = document.getElementById('matrix')
             const cells = matrix.children
@@ -247,7 +177,6 @@ const ConvueApp = {
 
             let i = 0;
             for(let cell of cells) {
-
                 if(!tmp[i].isAlive) {
                     if(tmp[i].neighboursAliveCount == 3) {
                         this.ressurect(cell)
