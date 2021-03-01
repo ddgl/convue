@@ -18,7 +18,7 @@ const ConvueApp = {
             let columnIndex = 0
             for (var i = 0; i < this.columnCount*this.rowCount; i++) {
                 const cellElement = document.createElement('div')
-                cellElement.classList.add('dead-cell')
+                Math.random() < 0.5 ? cellElement.classList.add('living-cell') : cellElement.classList.add('dead-cell')
                 if(columnIndex == this.columnCount - 1) {
                     ++rowIndex
                 }
@@ -28,26 +28,39 @@ const ConvueApp = {
                 matrix.appendChild(cellElement);
             }
         },
-        invertCell(cell) {
+        kill(cell){
+            cell.classList.remove('living-cell');
+            cell.classList.add('dead-cell');
+        },
+        ressurect(cell){
+            cell.classList.remove('dead-cell');
+            cell.classList.add('living-cell');
+        },
+        invert(cell) {
             if(cell.classList.contains('dead-cell')) {
-                cell.classList.remove('dead-cell');
-                cell.classList.add('living-cell');
+                this.ressurect(cell)
             } else if (cell.classList.contains('living-cell')){
-                cell.classList.remove('living-cell');
-                cell.classList.add('dead-cell');
+                this.kill(cell)
+            }
+        },
+        shuffle(){
+            const matrix = document.getElementById('matrix')
+            const cells = matrix.children
+            for(let cell of cells) {
+                Math.random() < 0.5 ? this.kill(cell) : this.ressurect(cell)
             }
         },
         toggleCell(event) {
             console.log(event)
             var cell = event.target
             console.log(cell)
-            this.invertCell(cell)
+            this.invert(cell)
         },
         invertCells() {
             const matrix = document.getElementById('matrix')
             const cells = matrix.children
             for(let cell of cells) {
-                this.invertCell(cell)
+                this.invert(cell)
             }
         },
         getStatusByHover(event) {
@@ -237,18 +250,15 @@ const ConvueApp = {
 
                 if(!tmp[i].isAlive) {
                     if(tmp[i].neighboursAliveCount == 3) {
-                        cell.classList.remove('dead-cell');
-                        cell.classList.add('living-cell');
+                        this.ressurect(cell)
                     } else {
                         //stay dead
                     }
                 } else if (tmp[i].isAlive) {
                     if(tmp[i].neighboursAliveCount < 2) {
-                        cell.classList.remove('living-cell');
-                        cell.classList.add('dead-cell');
+                        this.kill(cell)
                     } else if(tmp[i].neighboursAliveCount > 3){
-                        cell.classList.remove('living-cell');
-                        cell.classList.add('dead-cell');
+                        this.kill(cell)
                     } else {
                         //stay alive
                     }
