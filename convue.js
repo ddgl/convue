@@ -11,28 +11,22 @@ const ConvueApp = {
     methods: {
         initGrid() {
             const matrix = document.getElementById('matrix')
-            console.log(matrix)
             this.columnCount = getComputedStyle(matrix).getPropertyValue('--column-count')
             this.rowCount =  getComputedStyle(matrix).getPropertyValue('--row-count')
             
             let rowIndex = 0
             let columnIndex = 0
             for (var i = 0; i < this.columnCount*this.rowCount; i++) {
-                console.log("cell number: " + i)
                 const cellElement = document.createElement('div')
-                console.log(cellElement)
                 cellElement.classList.add('dead-cell')
                 if(columnIndex == this.columnCount - 1) {
                     ++rowIndex
                 }
                 columnIndex = i%this.columnCount
-                console.log("row: " + rowIndex)
-                console.log("column: " + columnIndex)
                 cellElement.setAttribute("data-rowindex", rowIndex)
                 cellElement.setAttribute("data-columnindex", columnIndex)
                 matrix.appendChild(cellElement);
             }
-            console.log(matrix.children)
         },
         invertCell(cell) {
             if(cell.classList.contains('dead-cell')) {
@@ -52,29 +46,21 @@ const ConvueApp = {
         invertCells() {
             const matrix = document.getElementById('matrix')
             const cells = matrix.children
-            console.log(cells)
             for(let cell of cells) {
-                console.log(cell)
                 this.invertCell(cell)
             }
         },
-        getNeighbours(event) {
+        getStatusByHover(event) {
             const cell = event.target
             const isAlive = cell.classList.contains('living-cell')
             const rowIndex = parseInt(cell.getAttribute("data-rowindex"))
             const columnIndex = parseInt(cell.getAttribute("data-columnindex"))
-            console.log(isAlive)
-            console.log(typeof(rowIndex))
-            console.log(typeof(columnIndex))
-            console.log(rowIndex + ", " + columnIndex)
             let neighboursAliveCount = 0;
-
             const matrix = document.getElementById('matrix')
 
             //n1
             if(!(columnIndex == 0 || rowIndex == 0)){
                 const n1 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                console.log(n1)
                 if(n1.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -83,7 +69,6 @@ const ConvueApp = {
             //n2
             if(!(rowIndex == 0)){
                 const n2 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex) + "']")
-                console.log(n2)
                 if(n2.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -92,7 +77,6 @@ const ConvueApp = {
             //n3
             if(!(rowIndex == 0 || columnIndex == this.columnCount - 1)){
                 const n3 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-                console.log(n3)
                 if(n3.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -101,7 +85,6 @@ const ConvueApp = {
             //n4
             if(!(columnIndex == 0)){ //!(columnIndex == 0)
                 const n4 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                console.log(n4)
                 if(n4.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -110,7 +93,6 @@ const ConvueApp = {
             //n5
             if(!(columnIndex == this.columnCount - 1)){ //!(columnIndex == this.columnCount - 1)
                 const n5 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-                console.log(n5)
                 if(n5.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -119,7 +101,6 @@ const ConvueApp = {
             //n6
             if(!(rowIndex == this.rowCount - 1 || columnIndex == 0)){ //!(rowIndex == this.rowCount - 1 || columnIndex == 0)
                 const n6 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                console.log(n6)
                 if(n6.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -128,7 +109,6 @@ const ConvueApp = {
             //n7
             if(!(rowIndex == this.rowCount - 1)){ //!(rowIndex == this.rowCount - 1)
                 const n7 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex) + "']")
-                console.log(n7)
                 if(n7.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -137,53 +117,46 @@ const ConvueApp = {
             //n8
             if(!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)){ //!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)
                 const n8 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-                console.log(n8)
                 if(n8.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
             }
 
+            console.log("cell at (" + rowIndex + ", " + columnIndex + "): " + "isAlive - " + isAlive + ", " + "neighboursAliveCount - " + neighboursAliveCount)
 
             if(cell.classList.contains('dead-cell')) {
                 if(neighboursAliveCount == 3) {
-                    console.log("you will be resurrected, because you have exactly " + neighboursAliveCount + " neighbours")
+                    console.log("You will be resurrected, because you have exactly 3 neighbours.")
                 } else {
-                    console.log("you stay dead, because you don't have exactly 3 neighbours, you have " + neighboursAliveCount + " neighbours")
+                    console.log("You stay dead, because you don't have exactly 3 neighbours.")
                 }
             } else if (cell.classList.contains('living-cell')) {
                 if(neighboursAliveCount < 2) {
-                    console.log("you will die, because you are lonely, because you only have " + neighboursAliveCount + " neighbours")
+                    console.log("You will die, because you are lonely.")
                 } else if(neighboursAliveCount > 3){
-                    console.log("you will die, because of overpopulation, because you have " + neighboursAliveCount + " neighbours")
+                    console.log("You will die, because of overpopulation.")
                 } else {
-                    console.log("you stay alive, because the population has a reasonable size, bacause you have " + neighboursAliveCount + " neighbours")
+                    console.log("You stay alive, because the population has a reasonable size.")
                 }
             }
-
-
-            const status = {isAlive : isAlive, neighboursAliveCount : neighboursAliveCount}
-            console.log(status)
-            return status
-
-
         },
 
         getStatus(cell) {
             const isAlive = cell.classList.contains('living-cell')
             const rowIndex = parseInt(cell.getAttribute("data-rowindex"))
             const columnIndex = parseInt(cell.getAttribute("data-columnindex"))
-            console.log(isAlive)
-            console.log(typeof(rowIndex))
-            console.log(typeof(columnIndex))
-            console.log(rowIndex + ", " + columnIndex)
             let neighboursAliveCount = 0;
-
             const matrix = document.getElementById('matrix')
+
+            /*
+            *n1 n2 n3
+            *n4    n5
+            *n6 n7 n8 
+            */
 
             //n1
             if(!(columnIndex == 0 || rowIndex == 0)){
                 const n1 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                console.log(n1)
                 if(n1.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -192,7 +165,6 @@ const ConvueApp = {
             //n2
             if(!(rowIndex == 0)){
                 const n2 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex) + "']")
-                console.log(n2)
                 if(n2.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -201,7 +173,6 @@ const ConvueApp = {
             //n3
             if(!(rowIndex == 0 || columnIndex == this.columnCount - 1)){
                 const n3 = matrix.querySelector("[data-rowindex='" + (rowIndex - 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-                console.log(n3)
                 if(n3.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -210,7 +181,6 @@ const ConvueApp = {
             //n4
             if(!(columnIndex == 0)){ //!(columnIndex == 0)
                 const n4 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                console.log(n4)
                 if(n4.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -219,7 +189,6 @@ const ConvueApp = {
             //n5
             if(!(columnIndex == this.columnCount - 1)){ //!(columnIndex == this.columnCount - 1)
                 const n5 = matrix.querySelector("[data-rowindex='" + (rowIndex) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-                console.log(n5)
                 if(n5.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -228,7 +197,6 @@ const ConvueApp = {
             //n6
             if(!(rowIndex == this.rowCount - 1 || columnIndex == 0)){ //!(rowIndex == this.rowCount - 1 || columnIndex == 0)
                 const n6 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex - 1) + "']")
-                console.log(n6)
                 if(n6.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -237,7 +205,6 @@ const ConvueApp = {
             //n7
             if(!(rowIndex == this.rowCount - 1)){ //!(rowIndex == this.rowCount - 1)
                 const n7 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex) + "']")
-                console.log(n7)
                 if(n7.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
@@ -246,34 +213,13 @@ const ConvueApp = {
             //n8
             if(!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)){ //!(columnIndex == this.columnCount - 1 || rowIndex == this.rowCount - 1)
                 const n8 = matrix.querySelector("[data-rowindex='" + (rowIndex + 1) + "'][data-columnindex='" + (columnIndex + 1) + "']")
-                console.log(n8)
                 if(n8.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
             }
 
-
-            if(cell.classList.contains('dead-cell')) {
-                if(neighboursAliveCount == 3) {
-                    console.log("you will be resurrected, because you have exactly " + neighboursAliveCount + " neighbours")
-                } else {
-                    console.log("you stay dead, because you don't have exactly 3 neighbours, you have " + neighboursAliveCount + " neighbours")
-                }
-            } else if (cell.classList.contains('living-cell')) {
-                if(neighboursAliveCount < 2) {
-                    console.log("you will die, because you are lonely, because you only have " + neighboursAliveCount + " neighbours")
-                } else if(neighboursAliveCount > 3){
-                    console.log("you will die, because of overpopulation, because you have " + neighboursAliveCount + " neighbours")
-                } else {
-                    console.log("you stay alive, because the population has a reasonable size, bacause you have " + neighboursAliveCount + " neighbours")
-                }
-            }
-
-
             const status = {isAlive : isAlive, neighboursAliveCount : neighboursAliveCount}
-            console.log(status)
             return status
-
 
         },
 
