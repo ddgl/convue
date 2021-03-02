@@ -2,7 +2,7 @@ const ConvueApp = {
 
     data() {
         return {
-            app_title: 'Convue',
+            app_title: 'Conway\'s Game of Life',
             columnCount: null,
             rowCount: null
         }

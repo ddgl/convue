@@ -9,15 +9,27 @@
     overflow-x: auto;
 }
 
+#titlebar {
+    text-align: center;
+}
+
 #matrix {
     background-color: bisque;
-    width: 80vmin;
-    height: 80vmin;
+    margin: auto;
+    width: 75vmin;
+    height: 75vmin;
     display: grid;
     --row-count: 25;
     --column-count: 25;
     grid-template-rows: repeat(var(--row-count), 1fr);
     grid-template-columns: repeat(var(--column-count), 1fr);
+}
+
+#toolbar {
+    margin: 1vmin auto;
+    width: 80vmin;
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .dead-cell {
