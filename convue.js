@@ -4,7 +4,9 @@ const ConvueApp = {
         return {
             app_title: 'Conway\'s Game of Life',
             columnCount: null,
-            rowCount: null
+            rowCount: null,
+            lifeDragInterval: null,
+            currentCell: null
         }
     },
 
@@ -63,8 +65,28 @@ const ConvueApp = {
                 this.invert(cell)
             }
         },
+        startLifeDrag() {
+            this.lifeDragInterval = setInterval(() => {
+                if(this.currentCell.classList.contains('dead-cell')){
+                    this.ressurect(this.currentCell)
+                }
+            },30)
+        },
+        endLifeDrag(event) {
+            clearInterval(this.lifeDragInterval)
+        },
+        killAll() {
+            const matrix = document.getElementById('matrix')
+            const cells = matrix.children
+            for(let cell of cells) {
+                if (cell.classList.contains('living-cell')){
+                    this.kill(cell)
+                }
+            }
+        },
         getStatusByHover(event) {
             const cell = event.target
+            this.currentCell = cell
             const status = this.getStatus(cell)
 
             console.log("cell at (" + status.rowIndex + ", " + status.columnIndex + "): " + "isAlive - " + status.isAlive + ", " + "neighboursAliveCount - " + status.neighboursAliveCount)
