@@ -2,9 +2,9 @@
     font-family: sans-serif;
     border: 1px solid #eee;
     border-radius: 2px;
-    padding: 20px 30px;
+    padding: 10px 10px;
     margin-top: 1em;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     user-select: none;
     overflow-x: auto;
 }
@@ -14,13 +14,13 @@
 }
 
 #matrix {
+    --row-count: 25;
+    --column-count: 30;
     background-color: bisque;
     margin: auto;
-    width: 75vmin;
-    height: 75vmin;
+    height: calc(var(--row-count)*2.5vmin);
+    width: calc(var(--column-count)*2.5vmin);
     display: grid;
-    --row-count: 25;
-    --column-count: 25;
     grid-template-rows: repeat(var(--row-count), 1fr);
     grid-template-columns: repeat(var(--column-count), 1fr);
 }
