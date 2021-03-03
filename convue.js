@@ -6,7 +6,7 @@ const ConvueApp = {
             columnCount: null,
             rowCount: null,
             lifeDragInterval: null,
-            currentCell: null
+            currentCellStatus: null
         }
     },
 
@@ -67,8 +67,8 @@ const ConvueApp = {
         },
         startLifeDrag() {
             this.lifeDragInterval = setInterval(() => {
-                if(this.currentCell.classList.contains('dead-cell')){
-                    this.ressurect(this.currentCell)
+                if(this.currentCellStatus.cell.classList.contains('dead-cell')){
+                    this.ressurect(this.currentCellStatus.cell)
                 }
             },30)
         },
@@ -86,27 +86,9 @@ const ConvueApp = {
         },
         getStatusByHover(event) {
             const cell = event.target
-            this.currentCell = cell
-            const status = this.getStatus(cell)
-
-            console.log("cell at (" + status.rowIndex + ", " + status.columnIndex + "): " + "isAlive - " + status.isAlive + ", " + "neighboursAliveCount - " + status.neighboursAliveCount)
-
-            if(!status.isAlive) {
-                if(status.neighboursAliveCount == 3) {
-                    console.log("You will be resurrected, because you have exactly 3 neighbours.")
-                } else {
-                    console.log("You stay dead, because you don't have exactly 3 neighbours.")
-                }
-            } else if (status.isAlive) {
-                if(status.neighboursAliveCount < 2) {
-                    console.log("You will die, because you are lonely.")
-                } else if(status.neighboursAliveCount > 3){
-                    console.log("You will die, because of overpopulation.")
-                } else {
-                    console.log("You stay alive, because the population has a reasonable size.")
-                }
-            }
+            this.currentCellStatus = this.getStatus(cell)
         },
+
         getStatus(cell) {
             const isAlive = cell.classList.contains('living-cell')
             const rowIndex = parseInt(cell.getAttribute("data-rowindex"))
@@ -182,10 +164,28 @@ const ConvueApp = {
                 if(n4.classList.contains('living-cell')) {
                     ++neighboursAliveCount
                 }
-            }   
+            }
 
-            const status = {rowIndex:rowIndex, columnIndex:columnIndex, isAlive : isAlive, neighboursAliveCount : neighboursAliveCount}
-            return status
+            var nextGenerationMessage = ""
+
+            if(!isAlive) {
+                if(neighboursAliveCount == 3) {
+                    nextGenerationMessage = "You will be resurrected, because you have exactly 3 neighbours."
+                } else {
+                    nextGenerationMessage = "You stay dead, because you don't have exactly 3 neighbours."
+                }
+            } else if (isAlive) {
+                if(neighboursAliveCount < 2) {
+                    nextGenerationMessage = "You will die, because you are lonely."
+                } else if(neighboursAliveCount > 3){
+                    nextGenerationMessage = "You will die, because of overpopulation."
+                } else {
+                    nextGenerationMessage = "You stay alive, because the population has a reasonable size."
+                }
+            }
+
+            const currentCellStatus = {cell:cell, rowIndex:rowIndex, columnIndex:columnIndex, isAlive : isAlive, neighboursAliveCount : neighboursAliveCount, nextGenerationMessage:nextGenerationMessage}
+            return currentCellStatus
 
         },
         nextGeneration(){

@@ -32,6 +32,10 @@
     justify-content: space-evenly;
 }
 
+#messageBox {
+    text-align: center;
+}
+
 .dead-cell {
     background-color: seashell;
     border: 0.1vmin solid silver;

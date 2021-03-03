@@ -23,6 +23,8 @@
         </div>
 
         <div id="matrix" ref="matrix" v-on:click="toggleCell" v-on:mouseover="getStatusByHover" v-on:mousedown="startLifeDrag" v-on:mouseup="endLifeDrag"></div>
+
+        <div id="messageBox"><p v-if="this.currentCellStatus!=null">Cell at ({{this.currentCellStatus.rowIndex}}, {{this.currentCellStatus.columnIndex}}): {{this.currentCellStatus.nextGenerationMessage}}<p></div>
     </div>
 
 </body>
