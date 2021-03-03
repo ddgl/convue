@@ -6,7 +6,8 @@ const ConvueApp = {
             columnCount: null,
             rowCount: null,
             lifeDragInterval: null,
-            currentCellStatus: null
+            currentCellStatus: null,
+            dragFlag: false
         }
     },
 
@@ -53,6 +54,7 @@ const ConvueApp = {
             }
         },
         toggleCell(event) {
+            this.dragFlag = false
             console.log(event)
             var cell = event.target
             console.log(cell)
@@ -65,9 +67,13 @@ const ConvueApp = {
                 this.invert(cell)
             }
         },
+        setDragFlag() {
+            this.dragFlag = true
+        },
         startLifeDrag() {
+            this.dragFlag = false //also necessary, otherwise can't distinguish click and drag events
             this.lifeDragInterval = setInterval(() => {
-                if(this.currentCellStatus.cell.classList.contains('dead-cell')){
+                if(this.dragFlag==true && this.currentCellStatus.cell.classList.contains('dead-cell')){
                     this.ressurect(this.currentCellStatus.cell)
                 }
             },30)
